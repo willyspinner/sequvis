@@ -1,7 +1,7 @@
 class ConnectionsHashTable {
     /*
 
-    Maps topic to an array of connected clients.
+    Maps topic to an array of connected client uuids.
 
      */
     constructor(){

@@ -22,14 +22,27 @@ module.exports = {
             type: EVENTS.ACK,
             event: {
                 success: true,
-                msg: `subscribed to topic ${topic_name}`
+                msg: `subscribed to topic ${topic_name}.`,
+                isSubscribing:true
             }
         }))
+    },
+    handleUnsubscribeFromTopic: (topic_name_unsubscribe,ws)=>{
+      ws.subscribedTopics.filter((topic_name)=>topic_name !== topic_name_unsubscribe);
+      ConnHash.unset(topic_name_unsubscribe,ws);
+        ws.send(JSON.stringify({
+            type: EVENTS.ACK,
+            event: {
+                success: true,
+                msg: `unsubscribed from topic ${topic_name_unsubscribe}.`,
+                isSubscribing:false
+            }
+        }));
     },
 
     handleCloseFromClient : (ws)=>{
         ws.subscribedTopics.forEach((topic)=>{
-            ConnHash.unset(topic,ws);
+            ConnHash.unset(topic,ws.id);
         })
 
     }

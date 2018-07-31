@@ -20,11 +20,10 @@ export default class SequenceDiagram extends Component{
                     .map(cur=>`${cur.from}-->${cur.to}:${cur.msg}`)
                     .reduce((acc,curr)=>`${acc}\n${curr}\n`);
         }
-        console.log('renderinput : ',renderInput);
         return (
 
             <div>
-                <h1>{this.props.title? this.props.title : 'untitled diagram'}</h1>
+                <h1>{typeof this.props.title === 'string'? this.props.title : 'untitled diagram'}</h1>
                 {this.props.items && this.props.items.length > 0 ? (
                         <SD
                             input={renderInput}

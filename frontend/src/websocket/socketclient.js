@@ -22,6 +22,19 @@ class SocketClient{
         }
 
     }
+    unsubscribeFromTopic(topic){
+        if(this.socket){
+            this.socket.send(
+                JSON.stringify({
+                    type:EVENTS.UNSUBSCRIBE_FROM_TOPIC,
+                    event: {
+                        topic
+                    }
+                })
+            );
+            console.log('sent');
+        }
+    }
     subscribeToTopic(topic){
         if(this.socket){
             this.socket.send(

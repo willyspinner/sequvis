@@ -38,6 +38,11 @@ wss.on('connection', function connection(ws) {
             case EVENTS.SUBSCRIBE_TO_TOPIC:
                 eventHandler.handleSubscribeToTopic(parsed_evt.event.topic,ws);
                 return;
+            case EVENTS.UNSUBSCRIBE_FROM_TOPIC:
+                eventHandler.handleUnsubscribeFromTopic(parsed_evt.event.topic,ws);
+                return;
+            default:
+                console.log('wsapp: unknown event: ',parsed_evt.type);
 
         }
     });
