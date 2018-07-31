@@ -1,0 +1,5 @@
+{
+"TOPIC_EVENT": "TE",
+  "SUBSCRIBE_TO_TOPIC": "STP",
+  "ACK":"ACK"
+}

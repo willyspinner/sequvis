@@ -20,7 +20,7 @@ where options is a JS object, with properties:
 ```js
 client.sendStep(topic, from,to,message);
 ```
-- `topic`: topic of sequence diagram.
+- `topic`: topic of sequence diagram. Can be string or array (of multiple topics)
 - `from`: sender name
 - `to`: recipient name
 - `message`: message to be displayed in arrow.
@@ -32,7 +32,7 @@ NOTE: `from` and `to` can be the same. For the same sender and recipient, a conv
 ```js
 client.sendProcessing(topic,who_is_processing,message);
 ```
-- `topic`: topic of sequence diagram.
+- `topic`: topic of sequence diagram. Can be string or array (of multiple topics)
 - `who_is_processing`: name of entity that is doing processing
 - `message`: message to be displayed in block.
 
