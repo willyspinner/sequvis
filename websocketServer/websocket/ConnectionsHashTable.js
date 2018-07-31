@@ -8,10 +8,10 @@ class ConnectionsHashTable {
         this.hashtable = new Map();
     }
 
-    get(topic_name){
+    getClients(topic_name){
         return this.hashtable[topic_name];
     }
-    set(topic_name,ws){
+    setClient(topic_name,ws){
         this.hashtable[topic_name] = [...this.hashtable[topic_name], ws];
     }
     unset(topic_name,disconnected_ws){

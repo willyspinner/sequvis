@@ -7,6 +7,10 @@ const wss = new WebSocket.Server({ port});
 
 wss.on('connection', function connection(ws) {
     ws.on('message', function incoming(message) {
+        /*
+
+        Message format
+         */
         let parsed_evt;
         try {
             parsed_evt = JSON.parse(message);
@@ -16,14 +20,15 @@ wss.on('connection', function connection(ws) {
         }
         switch(parsed_evt.type){
             case EVENTS.TOPIC_EVENT:
-                const topicevent = new TopicEvent(
+                eventHandler.handleTopicEventFromClient(
+                    new TopicEvent(
                     parsed_evt.event.topic,
                     parsed_evt.event.from,
                     parsed_evt.event.to,
                     parsed_evt.event.msg,
                     parsed_evt.event.timestamp,
-                    );
-                eventHandler.handleTopicEventFromClient(topicevent);
+                    )
+                );
                 return;
             case EVENTS.SUBSCRIBE_TO_TOPIC:
                 eventHandler.handleSubscribeToTopic(parsed_evt.event.topic,ws);
