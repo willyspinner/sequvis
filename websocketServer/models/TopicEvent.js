@@ -1,4 +1,4 @@
-export default class TopicEvent {
+class TopicEvent {
     constructor(topic,from,to,msg,timestamp){
     this.topic = topic;
     this.from = from;
@@ -17,3 +17,5 @@ export default class TopicEvent {
         }
     }
 }
+
+module.exports = TopicEvent;

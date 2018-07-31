@@ -6,11 +6,10 @@ const TopicEvent = require('./models/TopicEvent');
 const wss = new WebSocket.Server({ port});
 
 wss.on('connection', function connection(ws) {
+    ws.on('close',function (){
+        console.log(`client closed connection.`);
+    })
     ws.on('message', function incoming(message) {
-        /*
-
-        Message format
-         */
         let parsed_evt;
         try {
             parsed_evt = JSON.parse(message);
@@ -18,6 +17,7 @@ wss.on('connection', function connection(ws) {
         catch(e){
             return;
         }
+        console.log('wsapp: received parsed_event : ',parsed_evt);
         switch(parsed_evt.type){
             case EVENTS.TOPIC_EVENT:
                 eventHandler.handleTopicEventFromClient(
@@ -36,6 +36,5 @@ wss.on('connection', function connection(ws) {
 
         }
     });
-    console.log('replying with something.');
 });
 console.log('🚀 websocket server listening on port ',port);

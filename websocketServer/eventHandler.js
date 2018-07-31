@@ -1,9 +1,10 @@
 
-import ConnHash from './websocket/ConnectionsHashtable';
-import EVENTS from '../shared/websocketEvents.json';
+const ConnHash = require ( './websocket/ConnectionsHashtable');
+const EVENTS = require('../shared/websocketEvents.json');
 module.exports = {
     handleTopicEventFromClient: (topicEvent)=>{
-        ConnHash.getClients(topicEvent.topic).forEach((client_ws)=>{
+        const ws_clients = ConnHash.getClients(topicEvent.topic);
+       ws_clients.forEach((client_ws)=>{
            client_ws.send(
                JSON.stringify(
                    {

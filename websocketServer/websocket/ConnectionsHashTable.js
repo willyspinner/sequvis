@@ -9,7 +9,8 @@ class ConnectionsHashTable {
     }
 
     getClients(topic_name){
-        return this.hashtable[topic_name];
+        const clients =this.hashtable[topic_name];
+        return clients ? clients :[];
     }
     setClient(topic_name,ws){
         this.hashtable[topic_name] = [...this.hashtable[topic_name], ws];
