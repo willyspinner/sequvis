@@ -1,5 +1,7 @@
 const WebSocket = require('isomorphic-ws');
 const EVENTS = require('../shared/websocketEvents');
+const { PerformanceObserver, performance } = require('perf_hooks');
+
 class Client {
 
     constructor(client_name){
@@ -33,7 +35,7 @@ class Client {
                 from: this.clientname,
                 msg: message,
                 topic,
-                timestamp: Date.now()
+                timestamp: performance.now()
             }}
         ))
     }
