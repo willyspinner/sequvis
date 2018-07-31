@@ -13,11 +13,13 @@ class App extends Component {
         this.socketClient = new SocketClient();
         this.socketClient.connect('localhost','5555',(event)=>{
 
-           this.setState((prevState)=>({events: [...prevState.events,event]}))
-        });
+           this.setState((prevState)=>({
+               events: [...prevState.events,event].sort((a,b)=>a.timestamp > b.timestamp ? 1: -1)}))
+        },()=>{});
 
     }
     componentWillUnmount(){
+        this.socketClient.close();
 
     }
   render() {

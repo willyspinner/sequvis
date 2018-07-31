@@ -19,9 +19,10 @@ class ConnectionsHashTable {
         this.hashtable[topic_name] = [...clients, ws];
     }
     unset(topic_name,disconnected_ws){
-        console.error('disconnectClient not impl yet,');
-        //TODO: do this later.
-       // this.hashtable[topic_name] =this.hashtable.filter((ws)=> )
+
+        let topic_clients  = this.hashtable[topic_name];
+
+        this.hashtable[topic_name] =topic_clients.filter((ws)=>ws.id !== disconnected_ws.id);
     }
 
 }

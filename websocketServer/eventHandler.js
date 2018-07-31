@@ -17,6 +17,7 @@ module.exports = {
     },
     handleSubscribeToTopic: (topic_name,ws)=>{
         ConnHash.setClient(topic_name,ws);
+        ws.subscribedTopics.push(topic_name);
         ws.send(JSON.stringify({
             type: EVENTS.ACK,
             event: {
@@ -25,4 +26,11 @@ module.exports = {
             }
         }))
     },
+
+    handleCloseFromClient : (ws)=>{
+        ws.subscribedTopics.forEach((topic)=>{
+            ConnHash.unset(topic,ws);
+        })
+
+    }
 }

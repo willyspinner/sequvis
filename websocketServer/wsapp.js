@@ -4,10 +4,15 @@ const port = 5555;
 const eventHandler = require('./eventHandler')
 const TopicEvent = require('./models/TopicEvent');
 const wss = new WebSocket.Server({ port});
+const uuid  = require('uuid');
 
 wss.on('connection', function connection(ws) {
+    ws.id = uuid();
+    ws.subscribedTopics = [];
+    console.log(`${ws.id} established connection.`);
     ws.on('close',function (){
-        console.log(`client closed connection.`);
+        console.log(`${ws.id} client closed connection.`);
+        eventHandler.handleCloseFromClient(ws);
     })
     ws.on('message', function incoming(message) {
         let parsed_evt;
