@@ -9,7 +9,7 @@ module.exports = {
                JSON.stringify(
                    {
                        type: EVENTS.TOPIC_EVENT_FORWARDED,
-                       event: topicEvent.asObject()
+                       event: topicEvent.toObject()
                    }
                )
            );

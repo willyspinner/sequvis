@@ -4,8 +4,8 @@ console.log('creating connection..');
 client.createConnection(
 ).then(()=>{
     console.log('connection ok. Sending....');
-    client.sendStep('berdoge','client','helloo!');
-    client.sendProcessing('berdoge','processing ting');
+    client.sendStep('berdog','client','helloo!');
+    client.sendProcessing('berdog','processing ting');
     console.log('closing connection.')
     client.closeConnection();
     process.exit(0);
