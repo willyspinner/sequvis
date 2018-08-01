@@ -22,7 +22,7 @@ wss.on('connection', function connection(ws) {
         catch(e){
             return;
         }
-        console.log('wsapp: received parsed_event : ',parsed_evt);
+        //console.log('wsapp: received parsed_event : ',parsed_evt);
         switch(parsed_evt.type){
             case EVENTS.TOPIC_EVENT:
                 eventHandler.handleTopicEventFromClient(
@@ -40,6 +40,11 @@ wss.on('connection', function connection(ws) {
                 return;
             case EVENTS.UNSUBSCRIBE_FROM_TOPIC:
                 eventHandler.handleUnsubscribeFromTopic(parsed_evt.event.topic,ws);
+                return;
+            case EVENTS.ROUNDTRIP_REQUEST:
+                ws.send(JSON.stringify({
+                    type:EVENTS.ROUNDTRIP_RESPONSE
+                }))
                 return;
             default:
                 console.log('wsapp: unknown event: ',parsed_evt.type);

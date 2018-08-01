@@ -5,6 +5,7 @@ module.exports = {
     handleTopicEventFromClient: (topicEvent)=>{
         const ws_clients = ConnHash.getClients(topicEvent.topic);
        ws_clients.forEach((client_ws)=>{
+           console.log(`client ${client_ws.id} has topics : ${JSON.stringify(client_ws.subscribedTopics)}`);
            client_ws.send(
                JSON.stringify(
                    {
@@ -28,7 +29,7 @@ module.exports = {
         }))
     },
     handleUnsubscribeFromTopic: (topic_name_unsubscribe,ws)=>{
-      ws.subscribedTopics.filter((topic_name)=>topic_name !== topic_name_unsubscribe);
+      ws.subscribedTopics = ws.subscribedTopics.filter((topic_name)=>topic_name !== topic_name_unsubscribe);
       ConnHash.unset(topic_name_unsubscribe,ws);
         ws.send(JSON.stringify({
             type: EVENTS.ACK,
@@ -41,9 +42,12 @@ module.exports = {
     },
 
     handleCloseFromClient : (ws)=>{
+        console.log('handleCloseFromClient: unsubscribing',ws.id,' from wss. SubscribedTopics : ',ws.subscribedTopics.length);
         ws.subscribedTopics.forEach((topic)=>{
-            ConnHash.unset(topic,ws.id);
+            console.log('topic unsubscribing : ',topic);
+            ConnHash.unset(topic,ws);
         })
+        ws.subscribedTopics = [];
 
     }
 }

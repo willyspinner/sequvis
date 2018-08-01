@@ -4,7 +4,7 @@ import './styles/App.css';
 import 'normalize.css/normalize.css';
 import '@blueprintjs/core/lib/css/blueprint.css';
 import '@blueprintjs/icons/lib/css/blueprint-icons.css';
-import {Button,InputGroup,Intent} from '@blueprintjs/core';
+import {Button,InputGroup,Intent,Spinner} from '@blueprintjs/core';
 import moment from 'moment';
 import SocketClient from './websocket/socketclient';
 import SequenceDiagram from './SequenceDiagram';
@@ -16,7 +16,11 @@ class App extends Component {
         subscribeLoading : false,
         topicname : '',
         isConnected: false,
-        connectingString:'connecting to localhost 5555....'
+        connectingString:'connecting to localhost 5555....',
+        roundTripTime: 1,
+        roundTripInterval : 5000,
+        currentPerfTime : 0,
+        lastRttTime: 0
     }
 
     componentDidMount(){
@@ -42,7 +46,18 @@ class App extends Component {
 
         }).then(()=>{
             this.setState({isConnected:true});
-            AppToaster.show({message:'Connected to Websocket Server.',intent: Intent.PRIMARY, icon : 'tick-circle'})
+            this.spinner = setInterval(()=>{
+                this.setState(prevState=>({currentPerfTime :prevState.currentPerfTime+ 200}))
+            },200);
+            this.rtt = setInterval(()=>{
+                this.socketClient.sendRoundtrip((val)=>{
+                    console.log(`val resolved as : ${val}`)
+                    this.setState({roundTripTime:val,
+                    lastRttTime : performance.now(),
+                    currentPerfTime : performance.now()
+                    })
+                });
+            },this.state.roundTripInterval);
         }).catch((e)=>{
             this.setState({connectingString:'connection error.'})
             AppToaster.show({message:'Connection error.',intent: Intent.DANGER, icon : 'warning-sign'})
@@ -50,7 +65,11 @@ class App extends Component {
 
     }
     componentWillUnmount(){
+        if(this.rtt){
+            clearInterval(this.rtt);
+        }
         this.socketClient.close();
+        clearInterval(this.spinner);
 
     }
     handleSubscribe= ()=>{
@@ -72,8 +91,7 @@ class App extends Component {
     return (
       <div className="App">
         <header className="App-header">
-          <img src={logo} className="App-logo" alt="logo" />
-          <h1 className="App-title">Sequvis </h1>
+          <h1 className="App-logo" style={{fontSize:40}}>Sequvis </h1>
         </header>
           {this.state.isConnected?
               <div>
@@ -107,14 +125,28 @@ class App extends Component {
               }>
               Unsubscribe
           </Button>
+
+                  <div style={{display:'flex', flexDirection:'row',alignItems:'center', flexAlign:'center',margin:'auto',width:'15%'}}>
+                  <h4
+
+                      style={{marginRight: '15px'}}
+                  >Round Trip Time : { this.state.roundTripTime.toFixed(3)} ms</h4>
+                  <Spinner
+                      value={(this.state.currentPerfTime - this.state.lastRttTime ) / this.state.roundTripInterval}
+                      size={ 25}
+                      />
+                  </div>
               </div>
               :<h3>{this.state.connectingString}</h3>}
+          {this.state.hasSubscribed?
+
           <SequenceDiagram
-              title={this.state.hasSubscribed? this.state.topicname: ''}
+              title={ this.state.topicname}
             items={
               this.state.events
             }
           />
+              :null}
 
       </div>
     );

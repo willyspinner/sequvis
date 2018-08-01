@@ -23,7 +23,8 @@ export default class SequenceDiagram extends Component{
         return (
 
             <div>
-                <h1>{typeof this.props.title === 'string'? this.props.title : 'untitled diagram'}</h1>
+            <h1>{typeof this.props.title === 'string'? this.props.title : 'untitled diagram'}</h1>
+            <div style={{overflowY: 'auto', height :'500px', width:'50%',margin:'auto'}}>
                 {this.props.items && this.props.items.length > 0 ? (
                         <SD
                             input={renderInput}
@@ -33,6 +34,7 @@ export default class SequenceDiagram extends Component{
                     : <h4>Nothing in diagram yet.</h4>
                 }
 
+            </div>
             </div>
         )
     }
