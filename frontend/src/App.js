@@ -14,7 +14,9 @@ class App extends Component {
         events: [],
         hasSubscribed: false,
         subscribeLoading : false,
-        topicname : ''
+        topicname : '',
+        isConnected: false,
+        connectingString:'connecting to localhost 5555....'
     }
 
     componentDidMount(){
@@ -38,7 +40,13 @@ class App extends Component {
                 }))
             }
 
-        });
+        }).then(()=>{
+            this.setState({isConnected:true});
+            AppToaster.show({message:'Connected to Websocket Server.',intent: Intent.PRIMARY, icon : 'tick-circle'})
+        }).catch((e)=>{
+            this.setState({connectingString:'connection error.'})
+            AppToaster.show({message:'Connection error.',intent: Intent.DANGER, icon : 'warning-sign'})
+        })
 
     }
     componentWillUnmount(){
@@ -67,6 +75,8 @@ class App extends Component {
           <img src={logo} className="App-logo" alt="logo" />
           <h1 className="App-title">Sequvis </h1>
         </header>
+          {this.state.isConnected?
+              <div>
                <InputGroup
                onChange={(txt)=>{
                    if (!this.state.hasSubscribed)
@@ -74,7 +84,7 @@ class App extends Component {
                }}
                placeholder="Put topic to subscribe here..."
                value={this.state.topicname}
-               style={{width: ' 20%'
+               style={{width: ' 25%'
                ,marginTop:'10px'}}
                />
           <Button
@@ -97,6 +107,8 @@ class App extends Component {
               }>
               Unsubscribe
           </Button>
+              </div>
+              :<h3>{this.state.connectingString}</h3>}
           <SequenceDiagram
               title={this.state.hasSubscribed? this.state.topicname: ''}
             items={
