@@ -28,7 +28,7 @@ client.sendStep(topic, to,message);
 - `to`: recipient name
 - `message`: message to be displayed in arrow.
 
-NOTE: `from` and `to` can be the same. For the same sender and recipient, a convenience method is procided in `sendProcessing()`.
+NOTE: `to` and the client's own name can be the same. For the same sender and recipient, a convenience method is procided in `sendProcessing()`.
 
 
 ## convenience methods.
